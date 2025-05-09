@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'dev', url: 'https://github.com/Abimbola-star/JavaCalculatorPrivate.git'
+                git branch: 'latest', url: 'https://github.com/Abimbola-star/JavaWeb3.git'
             }
         }
 
