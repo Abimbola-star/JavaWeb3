@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'abimbola1994/java-web-calculator'
+        DOCKER_HUB_CREDENTIALS = 'docker-hub-creds'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'dev', url: 'https://github.com/Abimbola-star/JavaCalculatorPrivate.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    dockerImage = docker.build("${IMAGE_NAME}")
+                }
+            }
+        }
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_HUB_CREDENTIALS}") {
+                        dockerImage.push('latest')
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build and push completed successfully.'
+        }
+        failure {
+            echo '❌ Build failed.'
+        }
+    }
+}
+
